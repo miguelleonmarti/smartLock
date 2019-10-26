@@ -69,7 +69,8 @@ public class HomeActivity
       new AcceptThread(bluetoothAdapter, MY_UUID, NAME, new BluetoothContract.AcceptThread() {
         @Override
         public void onSocketConnected(BluetoothSocket socket) {
-          new ConnectedThread(socket, handler).start(); //todo hay que cerrarlo de algun modo??
+          ConnectedThread connectedThread = new ConnectedThread(socket, handler); //todo hay que cerrarlo de algun modo??
+          connectedThread.start();
         }
       }).start();
     }
