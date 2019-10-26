@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold"
         tools:text="Hello" />
 
 </FrameLayout>

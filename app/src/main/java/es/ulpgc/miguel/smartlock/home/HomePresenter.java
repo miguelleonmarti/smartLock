@@ -39,8 +39,13 @@ public class HomePresenter implements HomeContract.Presenter {
       public void onProcessedRequest(boolean error) {
         if (!error) {
           // no errors, successful request
+          viewModel.setMessage("Acción realizada sobre la puerta" + viewModel.getIndex());
+          viewModel.setIndex(viewModel.getIndex()+1);
+          view.get().displayData(viewModel);
         } else {
           // something wrong happened
+          viewModel.setMessage("Error");
+          view.get().displayData(viewModel);
         }
       }
     });

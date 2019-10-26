@@ -2,6 +2,8 @@ package es.ulpgc.miguel.smartlock.app;
 
 import android.app.Application;
 
+import com.google.firebase.FirebaseApp;
+
 import es.ulpgc.miguel.smartlock.home.HomeState;
 
 public class AppMediator extends Application {
@@ -12,7 +14,7 @@ public class AppMediator extends Application {
     super.onCreate();
 
     // initializing the FirebaseApp
-    // todo
+    FirebaseApp.initializeApp(getApplicationContext());
 
     // initializing states
     this.homeState = new HomeState();

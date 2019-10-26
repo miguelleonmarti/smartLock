@@ -46,7 +46,7 @@ public class ConnectedThread extends Thread {
     int numBytes; // bytes returned from read()
 
     // Keep listening to the InputStream until an exception occurs.
-    while (true) {
+   while (true) {
       try {
         // Read from the InputStream.
         numBytes = mmInStream.read(mmBuffer);
@@ -55,12 +55,14 @@ public class ConnectedThread extends Thread {
             MESSAGE_READ, numBytes, -1,
             mmBuffer);
         readMsg.sendToTarget();
+        this.cancel();
       } catch (IOException e) {
         Log.d(TAG, "Input stream was disconnected", e);
+
         break;
       }
     }
-    this.cancel(); // todo: no se si va o no aquí
+     // todo: no se si va o no aquí
   }
 
   // Call this from the main activity to send data to the remote device.

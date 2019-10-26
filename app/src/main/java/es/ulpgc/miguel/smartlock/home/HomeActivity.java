@@ -23,6 +23,9 @@ public class HomeActivity
 
   private HomeContract.Presenter presenter;
 
+  // text view
+  private TextView message;
+
   // bluetooth
   private static final String NAME = "BluetoothCommunication";
   private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -50,6 +53,9 @@ public class HomeActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
 
+    // text view
+    message = findViewById(R.id.data);
+
     // bluetooth
     bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     new AcceptThread(bluetoothAdapter, MY_UUID, NAME, new BluetoothContract.AcceptThread() {
@@ -69,10 +75,12 @@ public class HomeActivity
   }
 
   @Override
-  public void displayData(HomeViewModel viewModel) {
-    //Log.e(TAG, "displayData()");
-
-    // deal with the data
-    ((TextView) findViewById(R.id.data)).setText(viewModel.data);
+  public void displayData(final HomeViewModel viewModel) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        message.setText(viewModel.getMessage());
+      }
+    });
   }
 }
