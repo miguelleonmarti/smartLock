@@ -36,15 +36,17 @@ public class HomeModel implements HomeContract.Model {
         boolean open = (boolean) dataSnapshot.getValue();
         if (open) {
           statusReference.setValue(false); // if door is open it closes it
+          callback.onProcessedRequest(false, false);
         } else {
           statusReference.setValue(true); // else it opens it
+          callback.onProcessedRequest(false, true);
         }
-        callback.onProcessedRequest(false);
+
       }
 
       @Override
       public void onCancelled(@NonNull DatabaseError databaseError) {
-        callback.onProcessedRequest(true); // todo no estoy seguro
+        callback.onProcessedRequest(true, true); // todo no estoy seguro
       }
     });
   }

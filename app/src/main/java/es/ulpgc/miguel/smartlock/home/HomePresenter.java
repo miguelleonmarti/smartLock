@@ -1,5 +1,7 @@
 package es.ulpgc.miguel.smartlock.home;
 
+import android.util.Log;
+
 import java.lang.ref.WeakReference;
 
 import es.ulpgc.miguel.smartlock.services.FirebaseContract;
@@ -36,16 +38,17 @@ public class HomePresenter implements HomeContract.Presenter {
   public void processRequest(String uid) {
     model.processRequest(uid, new FirebaseContract.ProcessRequest() {
       @Override
-      public void onProcessedRequest(boolean error) {
+      public void onProcessedRequest(boolean error, boolean open) {
         if (!error) {
           // no errors, successful request
-          viewModel.setMessage("Acción realizada sobre la puerta" + viewModel.getIndex());
-          viewModel.setIndex(viewModel.getIndex()+1);
+          if (open)
+            viewModel.setMessage("Open");
+          else
+            viewModel.setMessage("Closed");
           view.get().displayData(viewModel);
         } else {
           // something wrong happened
-          viewModel.setMessage("Error");
-          view.get().displayData(viewModel);
+          Log.d("Error", "something wrong happened");
         }
       }
     });

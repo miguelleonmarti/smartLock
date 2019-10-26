@@ -2,9 +2,11 @@ package es.ulpgc.miguel.smartlock.home;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.UUID;
@@ -25,13 +27,13 @@ public class HomeActivity
 
   // text view
   private TextView message;
+  private LinearLayout layout;
 
   // bluetooth
   private static final String NAME = "BluetoothCommunication";
   private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
   private static final int MESSAGE_READ = 0;
   private BluetoothAdapter bluetoothAdapter;
-
   Handler handler = new Handler(new Handler.Callback() {
     @Override
     public boolean handleMessage(@NonNull Message message) {
@@ -40,8 +42,6 @@ public class HomeActivity
           byte[] readBuffer = (byte[]) message.obj;
           String uid = new String(readBuffer, 0, message.arg1);
           presenter.processRequest(uid);
-          //textView.setText(tempMsg); // todo cambiar
-
           break;
       }
       return false;
@@ -53,17 +53,26 @@ public class HomeActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_home);
 
-    // text view
-    message = findViewById(R.id.data);
+    // hiding the action bar
+    getSupportActionBar().hide();
+
+    // initializing text view and layout
+    message = findViewById(R.id.messageText);
+    layout = findViewById(R.id.layout);
 
     // bluetooth
     bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    new AcceptThread(bluetoothAdapter, MY_UUID, NAME, new BluetoothContract.AcceptThread() {
-      @Override
-      public void onSocketConnected(BluetoothSocket socket) {
-        new ConnectedThread(socket, handler).start(); //todo hay que cerrarlo de algun modo??
-      }
-    }).start();
+    if (!bluetoothAdapter.isEnabled()) {
+      Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+      startActivity(enableBluetoothIntent);
+    } else {
+      new AcceptThread(bluetoothAdapter, MY_UUID, NAME, new BluetoothContract.AcceptThread() {
+        @Override
+        public void onSocketConnected(BluetoothSocket socket) {
+          new ConnectedThread(socket, handler).start(); //todo hay que cerrarlo de algun modo??
+        }
+      }).start();
+    }
 
     // do the setup
     HomeScreen.configure(this);
@@ -80,6 +89,10 @@ public class HomeActivity
       @Override
       public void run() {
         message.setText(viewModel.getMessage());
+        if (viewModel.getMessage().equals("Open"))
+          layout.setBackgroundColor(getResources().getColor(R.color.green_background));
+        else
+          layout.setBackgroundColor(getResources().getColor(R.color.red_background));
       }
     });
   }
