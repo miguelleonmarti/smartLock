@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -71,6 +72,7 @@ public class HomeActivity
         public void onSocketConnected(BluetoothSocket socket) {
           ConnectedThread connectedThread = new ConnectedThread(socket, handler); //todo hay que cerrarlo de algun modo??
           connectedThread.start();
+          SystemClock.sleep(1000);
         }
       }).start();
     }

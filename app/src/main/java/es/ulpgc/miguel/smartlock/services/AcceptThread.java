@@ -3,6 +3,7 @@ package es.ulpgc.miguel.smartlock.services;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.IOException;
