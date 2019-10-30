@@ -53,4 +53,9 @@ public class HomePresenter implements HomeContract.Presenter {
       }
     });
   }
+
+  @Override
+  public void syncDoor(String address) {
+    model.syncDoor(address);
+  }
 }

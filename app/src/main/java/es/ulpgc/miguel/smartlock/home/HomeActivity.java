@@ -33,6 +33,7 @@ public class HomeActivity
   // bluetooth
   private static final String NAME = "BluetoothCommunication";
   private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+  private String address;
   private static final int MESSAGE_READ = 0;
   private BluetoothAdapter bluetoothAdapter;
   Handler handler = new Handler(new Handler.Callback() {
@@ -63,6 +64,7 @@ public class HomeActivity
 
     // bluetooth
     bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    address = bluetoothAdapter.getAddress();
     if (!bluetoothAdapter.isEnabled()) {
       Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
       startActivity(enableBluetoothIntent);
@@ -72,13 +74,16 @@ public class HomeActivity
         public void onSocketConnected(BluetoothSocket socket) {
           ConnectedThread connectedThread = new ConnectedThread(socket, handler); //todo hay que cerrarlo de algun modo??
           connectedThread.start();
-          SystemClock.sleep(1000);
+          SystemClock.sleep(1500);
         }
       }).start();
     }
 
     // do the setup
     HomeScreen.configure(this);
+
+    // sync door
+    presenter.syncDoor(address);
   }
 
   @Override

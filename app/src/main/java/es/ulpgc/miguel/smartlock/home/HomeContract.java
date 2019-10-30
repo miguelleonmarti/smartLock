@@ -20,10 +20,14 @@ interface HomeContract {
     void injectRouter(Router router);
 
     void processRequest(String uid);
+
+    void syncDoor(String address);
   }
 
   interface Model {
     void processRequest(String uid, FirebaseContract.ProcessRequest callback);
+
+    void syncDoor(String address);
   }
 
   interface Router {
